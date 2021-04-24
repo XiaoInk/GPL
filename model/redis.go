@@ -19,7 +19,8 @@ func GetRdb() (*redis.Client, context.Context) {
 }
 
 func init() {
-	opt, err := redis.ParseURL(Config.Redis)
+	opt, err := redis.ParseURL(Config.RedisUri)
+
 	if err != nil {
 		log.Fatalln("Redis.ParseURL.err", err.Error())
 	}

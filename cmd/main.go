@@ -9,6 +9,8 @@ import (
 	"log"
 
 	"github.com/XiaoInk/GPL/router"
+
+	_ "github.com/XiaoInk/GPL/model"
 )
 
 func main() {

@@ -8,6 +8,7 @@ package router
 import (
 	"net/http"
 
+	"github.com/XiaoInk/GPL/handler"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,5 +18,8 @@ func init() {
 	App = gin.Default()
 
 	// 可作健康检查等用途
-	App.Any("/ok", func(c *gin.Context) { c.String(http.StatusOK, "ok") })
+	App.HEAD("/ok", func(c *gin.Context) { c.String(http.StatusOK, "ok") })
+
+	// 用户登录
+	App.POST("/login", handler.Login)
 }
