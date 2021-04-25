@@ -14,7 +14,11 @@ type user table.User
 
 func NewUser() *user { return &user{} }
 
-// 验证用户名、密码是否匹配
-func (u *user) MustMatchUsernameAndPassword() bool {
+func (u *user) GetUserById(userId int) bool {
+	return model.Getdb().Where("id = ?", userId).Take(&u).RowsAffected == 1
+}
+
+// 匹配用户名、密码
+func (u *user) MatchUsernameAndPassword() bool {
 	return model.Getdb().Where("username = ? and password = ?", u.Username, u.Password).Take(&u).RowsAffected == 1
 }

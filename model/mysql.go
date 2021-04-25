@@ -24,10 +24,10 @@ func Getdb() *gorm.DB {
 func init() {
 	var err error
 
-	db, err = gorm.Open(mysql.Open(Config.MySQLUri+"?charset=utf8mb4&parseTime=True&loc=Local"), &gorm.Config{
+	db, err = gorm.Open(mysql.Open(Config.MySQL.URI+"?charset=utf8mb4&parseTime=True&loc=Local"), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
-			TablePrefix:   Config.TablePrefix, // 表名前缀
-			SingularTable: true,               // 启用单数表名
+			TablePrefix:   Config.MySQL.TablePrefix, // 表名前缀
+			SingularTable: true,                     // 启用单数表名
 		},
 	})
 
@@ -46,8 +46,11 @@ func init() {
 
 	// 数据表迁移
 	err = db.AutoMigrate(&table.User{})
-
 	if err != nil {
 		log.Fatalln("Gorm.AutoMigrate.err", err.Error())
 	}
+
+	// 用户表初始化
+	user := table.User{}
+	user.Init(db)
 }

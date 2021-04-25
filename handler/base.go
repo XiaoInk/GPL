@@ -17,8 +17,8 @@ type response struct {
 func NewResponse() *response {
 	return &response{
 		Meta: map[string]interface{}{
-			"code":    http.StatusBadRequest,
-			"message": "请求参数错误",
+			"msg":    "请求参数错误",
+			"status": http.StatusBadRequest,
 		},
 	}
 }
@@ -27,6 +27,6 @@ func (r *response) SetData(data interface{}) { r.Data = data }
 
 func (r *response) SetMeta(meta map[string]interface{}) { r.Meta = meta }
 
-func (r *response) SetMetaCode(code int) { r.Meta["code"] = code }
+func (r *response) SetMetaMsg(msg string) { r.Meta["msg"] = msg }
 
-func (r *response) SetMetaMessage(msg string) { r.Meta["message"] = msg }
+func (r *response) SetMetaStatus(code int) { r.Meta["status"] = code }

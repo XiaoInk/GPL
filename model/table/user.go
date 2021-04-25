@@ -5,6 +5,11 @@
 
 package table
 
+import (
+	"github.com/XiaoInk/GPL/util"
+	"gorm.io/gorm"
+)
+
 type User struct {
 	ID        uint   `gorm:"primaryKey" json:"id"`
 	Name      string `gorm:"size:128;comment:姓名" json:"name"`
@@ -17,4 +22,17 @@ type User struct {
 	RoleName  string `gorm:"size:128;default:普通用户;comment:角色名称" json:"role_name"`
 	CreatedAt int    `gorm:"autoCreateTime;comment:创建时间" json:"created_at"`
 	UpdatedAt int    `gorm:"autoUpdateTime;comment:更新时间" json:"updated_at"`
+}
+
+func (u *User) Init(db *gorm.DB) {
+	if db.Where("username = 'admin'").Take(&u).RowsAffected != 1 {
+		u.Name = "Admin"
+		u.Username = "admin"
+		u.Password = util.MD5("admin@example.com")
+		u.Email = "admin@example.com"
+		u.RoleID = 1
+		u.RoleName = "超级管理"
+
+		db.Create(&u)
+	}
 }

@@ -5,19 +5,21 @@
 
 package model
 
+type MySQL struct{ URI, TablePrefix string }
+
+type Redis struct{ URI string }
+
 type config struct {
 	TokenPrefix string
-	MySQLUri    string
-	TablePrefix string
-	RedisUri    string
+	MySQL
+	Redis
 }
 
 func NewConfig() *config {
 	return &config{
 		TokenPrefix: "GPL-",
-		MySQLUri:    "root:123456@tcp(127.0.0.1:3306)/gpldb",
-		TablePrefix: "gpl_",
-		RedisUri:    "redis://:123456@127.0.0.1:6379/0",
+		MySQL:       MySQL{URI: "root:123456@tcp(127.0.0.1:3306)/gpldb", TablePrefix: "gpl_"},
+		Redis:       Redis{URI: "redis://:123456@127.0.0.1:6379/0"},
 	}
 }
 

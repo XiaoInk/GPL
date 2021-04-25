@@ -15,7 +15,6 @@ import (
 
 func main() {
 	err := router.App.Run()
-
 	if err != nil {
 		log.Fatalln("Main.App.Run.err", err.Error())
 	}

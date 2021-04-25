@@ -12,21 +12,23 @@ import (
 	"github.com/XiaoInk/GPL/util"
 )
 
-func Login(username, password string) (string, error) {
-	user := dao.NewUser()
-	user.Username = username
-	user.Password = password
+type LoginParams struct{ Username, Password string }
 
-	ok := user.MustMatchUsernameAndPassword()
+func Login(p LoginParams) (string, error) {
+	user := dao.NewUser()
+	user.Username = p.Username
+	user.Password = util.MD5(p.Password)
+
+	ok := user.MatchUsernameAndPassword()
 	if !ok {
-		return "", errors.New("登录失败")
+		return "", errors.New("用户名或密码错误")
 	}
 
-	token := dao.NewToken(util.MD5(user.Username + util.RandString(4)))
-	err := token.SetCache(user.ID, 60*60)
+	token := dao.NewToken(user.Username)
+	err := dao.SetToken(token, user.ID, 60*60*8)
 	if err != nil {
 		return "", errors.New("缓存失败")
 	}
 
-	return token.Str, nil
+	return token, nil
 }

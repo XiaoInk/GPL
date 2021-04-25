@@ -9,6 +9,7 @@ import (
 	"net/http"
 
 	"github.com/XiaoInk/GPL/handler"
+	"github.com/XiaoInk/GPL/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,9 +18,15 @@ var App *gin.Engine
 func init() {
 	App = gin.Default()
 
-	// 可作健康检查等用途
+	// 健康检查
 	App.HEAD("/ok", func(c *gin.Context) { c.String(http.StatusOK, "ok") })
 
-	// 用户登录
+	// 登录
 	App.POST("/login", handler.Login)
+
+	// 需要授权
+	Auth := App.Group("/", middleware.Authenticator)
+	{
+		Auth.POST("/logout", handler.Logout)
+	}
 }

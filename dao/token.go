@@ -9,20 +9,22 @@ import (
 	"time"
 
 	"github.com/XiaoInk/GPL/model"
+	"github.com/XiaoInk/GPL/util"
 )
 
-type token struct{ Str string }
+func NewToken(s string) string { return util.MD5(s + util.RandString(4)) }
 
-func NewToken(s string) *token {
-	return &token{Str: model.Config.TokenPrefix + s}
+func SetToken(token string, val interface{}, exp time.Duration) error {
+	rdb, ctx := model.GetRdb()
+	return rdb.Set(ctx, model.Config.TokenPrefix+token, val, exp*time.Second).Err()
 }
 
-func (t *token) SetCache(val interface{}, exp time.Duration) error {
+func GetTokenInt(token string) (int, error) {
 	rdb, ctx := model.GetRdb()
-	return rdb.Set(ctx, t.Str, val, exp*time.Second).Err()
+	return rdb.Get(ctx, model.Config.TokenPrefix+token).Int()
 }
 
-func (t *token) GetCache() (int, error) {
+func DelToken(token string) error {
 	rdb, ctx := model.GetRdb()
-	return rdb.Get(ctx, t.Str).Int()
+	return rdb.Del(ctx, model.Config.TokenPrefix+token).Err()
 }

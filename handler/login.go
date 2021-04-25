@@ -12,37 +12,30 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type LoginParams struct {
-	Username string `form:"username" json:"username" binding:"required"`
-	Password string `form:"password" json:"password" binding:"required"`
+type LoginReq struct {
+	Username string `form:"username" json:"username" binding:"required,min=4,max=20"`
+	Password string `form:"password" json:"password" binding:"required,min=6,max=25"`
 }
 
-func Bind(ctx *gin.Context, params interface{}) {
-	res := NewResponse()
-	ctx.AbortWithStatusJSON(http.StatusOK, res)
-}
-
-func Login(ctx *gin.Context) {
-	var p LoginParams
+func Login(c *gin.Context) {
+	var p LoginReq
 
 	res := NewResponse()
-	err := ctx.ShouldBind(&p)
-	if err != nil {
-		ctx.JSON(http.StatusOK, res)
+	if err := c.ShouldBind(&p); err != nil {
+		c.JSON(http.StatusOK, res)
 		return
 	}
 
-	token, err := logic.Login(p.Username, p.Password)
+	token, err := logic.Login(logic.LoginParams{Username: p.Username, Password: p.Password})
 	if err != nil {
-		res.SetMetaMessage(err.Error())
-		ctx.JSON(http.StatusOK, res)
-		return
+		res.SetMetaMsg(err.Error())
+	} else {
+		res.SetMeta(map[string]interface{}{
+			"msg":    "登录成功",
+			"status": http.StatusOK,
+			"token":  token,
+		})
 	}
 
-	res.SetMeta(map[string]interface{}{
-		"code":    http.StatusOK,
-		"token":   token,
-		"message": "登录成功",
-	})
-	ctx.JSON(http.StatusOK, res)
+	c.JSON(http.StatusOK, res)
 }
