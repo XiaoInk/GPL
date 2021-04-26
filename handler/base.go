@@ -9,6 +9,27 @@ import (
 	"net/http"
 )
 
+type pager struct {
+	Page     int    `form:"page"`
+	PageSize int    `form:"pagesize"`
+	Order    string `form:"order"`
+	Limit    int
+	Offset   int
+}
+
+func NewPager() *pager {
+	return &pager{
+		Page:     1,
+		PageSize: 10,
+		Order:    "updated_at desc",
+	}
+}
+
+func (p *pager) Init() {
+	p.Limit = p.PageSize
+	p.Offset = (p.Page - 1) * p.Limit
+}
+
 type response struct {
 	Data interface{}            `json:"data"`
 	Meta map[string]interface{} `json:"meta"`

@@ -1,0 +1,8 @@
+version: "3.9"
+
+services:
+    GPL:
+        build:
+            context: ..
+            dockerfile: docker/Dockerfile
+        image: GPL:${VER:-latest}

@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+    GPL:
+        image: GPL:${VER:-latest}
+        ports:
+            - target: 8080
+              published: 80
+              protocol: tcp
+              mode: host
+        environment:
+            ENV: ${ENV:-dev}
+        networks:
+            - stack
+        deploy:
+            replicas: ${REPLICAS:-1}
+            placement:
+                constraints:
+                    - node.lables.host == api
+
+networks:
+    stack:
+        dirver: overlay

@@ -14,7 +14,7 @@ type user table.User
 
 func NewUser() *user { return &user{} }
 
-func (u *user) GetUserById(userId int) bool {
+func (u *user) IsExistById(userId int) bool {
 	return model.Getdb().Where("id = ?", userId).Take(&u).RowsAffected == 1
 }
 

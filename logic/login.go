@@ -25,6 +25,7 @@ func Login(p LoginParams) (string, error) {
 	}
 
 	token := dao.NewToken(user.Username)
+
 	err := dao.SetToken(token, user.ID, 60*60*8)
 	if err != nil {
 		return "", errors.New("缓存失败")

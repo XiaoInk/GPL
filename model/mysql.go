@@ -45,7 +45,7 @@ func init() {
 	sqldb.SetConnMaxLifetime(time.Second * 30)
 
 	// 数据表迁移
-	err = db.AutoMigrate(&table.User{})
+	err = db.AutoMigrate(&table.User{}, &table.Domain{})
 	if err != nil {
 		log.Fatalln("Gorm.AutoMigrate.err", err.Error())
 	}

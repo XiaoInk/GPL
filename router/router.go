@@ -18,6 +18,9 @@ var App *gin.Engine
 func init() {
 	App = gin.Default()
 
+	// 解决跨域问题
+	App.Use(middleware.Cors)
+
 	// 健康检查
 	App.HEAD("/ok", func(c *gin.Context) { c.String(http.StatusOK, "ok") })
 
@@ -27,6 +30,12 @@ func init() {
 	// 需要授权
 	Auth := App.Group("/", middleware.Authenticator)
 	{
+		// 注销
 		Auth.POST("/logout", handler.Logout)
+
+		// 添加域名
+		Auth.POST("/domains", handler.AddDomain)
+		// 获取域名列表
+		Auth.GET("/domains", handler.GetDomains)
 	}
 }

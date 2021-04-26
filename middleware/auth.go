@@ -27,7 +27,7 @@ func Authenticator(c *gin.Context) {
 	}
 
 	user := dao.NewUser()
-	ok := user.GetUserById(userId)
+	ok := user.IsExistById(userId)
 	if !ok {
 		res.SetMetaMsg("获取用户信息失败")
 		c.JSON(http.StatusOK, res)
@@ -35,7 +35,7 @@ func Authenticator(c *gin.Context) {
 		return
 	}
 
-	c.Set("userId", int(user.ID))
-	c.Set("userName", user.Name)
-	c.Set("roleId", int(user.RoleID))
+	c.Set("userId", user.ID)     // uint
+	c.Set("userName", user.Name) // string
+	c.Set("roleId", user.RoleID) // uint
 }
