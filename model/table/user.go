@@ -12,7 +12,7 @@ import (
 
 type User struct {
 	ID        uint   `gorm:"primaryKey" json:"id"`
-	Name      string `gorm:"size:128;comment:姓名" json:"name"`
+	Name      string `gorm:"size:128;not null;comment:姓名" json:"name"`
 	Username  string `gorm:"size:128;not null;unique;comment:登录用户" json:"username"`
 	Password  string `gorm:"size:128;not null;comment:登录密码" json:"-"`
 	Email     string `gorm:"size:128;not null;unique;comment:邮件地址" json:"email"`

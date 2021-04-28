@@ -14,8 +14,8 @@ type user table.User
 
 func NewUser() *user { return &user{} }
 
-func (u *user) IsExistById(userId int) bool {
-	return model.Getdb().Where("id = ?", userId).Take(&u).RowsAffected == 1
+func (u *user) IsExistById(id uint) bool {
+	return model.Getdb().Where("id = ?", id).Take(&u).RowsAffected == 1
 }
 
 // 匹配用户名、密码
